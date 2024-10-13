@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src='https://unpkg.com/akar-icons-fonts'></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="navbar"></div>
+    <h1>Login</h1>
+    <form action="/login" method="POST" class="form">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+    
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+
+        New user? <a href="register.html">Register</a>
+    
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>

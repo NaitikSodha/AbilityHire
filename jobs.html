@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Jobs</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src='https://unpkg.com/akar-icons-fonts'></script>
+    <script src="https://kit.fontawesome.com/d8e4802e3e.js" crossorigin="anonymous"></script>
+    <script src="script.js" defer></script>
+    <script src="jobs.js" defer></script>
+</head>
+<body>
+    <div id="navbar"></div>
+    <div class="top-menu1">
+        <h1>Available Jobs</h1>
+        <div class="search-container">
+            <input type="text" id="jobSearch" placeholder="Search for jobs..." onkeyup="filterJobs()">
+            <span id="searchIcon" class="search-icon"><i class="ai-search"></i></span>
+            <span id="clearSearch" class="clear-icon" style="display: none;"><i class="ai-cross"></i></span>
+        </div>
+        <div class="sort-container">
+            <button id="sort-button" class="dropdown-button"><i class="ai-sort"></i></button>
+            <div id="sort-options" class="sort-options" style="display: none;">
+                <div class="sort-option" data-order="none">None</div>
+                <div class="sort-option" data-order="asc">Ascending</div>
+                <div class="sort-option" data-order="desc">Descending</div>
+            </div>
+        </div>
+        <div class="filter-container">
+            <button id="filter-button" class="dropdown-button"><i class="ai-filter"></i></button>
+            <div id="filter-options" class="filter-options" style="display: none;">
+                <div class="filter-option" data-filter="all">All</div>
+                <div class="filter-option" data-filter="Developer">Developer</div>
+                <div class="filter-option" data-filter="Engineer">Engineer</div>
+                <div class="filter-option" data-filter="Designer">Designer</div>
+                <div class="filter-option" data-filter="Game">Game</div>
+            </div>
+        </div>
+        <div class="filter-container">
+            <button id="ability-button" class="dropdown-button"><i class="fa-solid fa-wheelchair"></i></button>
+            <div id="ability-options" class="filter-options" style="display: none;">
+                <div class="ability-option" data-filter="all">All</div>
+                <div class="ability-option" data-filter="Hand">Hand</div>
+                <div class="ability-option" data-filter="Leg">Leg</div>
+                <div class="ability-option" data-filter="Brain">Brain</div>
+            </div>
+        </div>
+    </div>
+        <div class="job-listings-container">
+            <div class="job-listing-template">
+                <div class="job-listing">
+                    <div class="job-title"></div>
+                    <div class="company-name"></div>
+                    <div class="job-location"></div>
+                    <div class="job-disability"></div>
+                    <p class="job-description"></p>
+                    <div class="job-salary"></div>
+                    <a href="" class="apply-now">Apply Now</a>
+                    </div>
+                    <div class="company-logo">
+                    <img src="" alt="Company Logo" class="c-logo">
+                </div>
+            </div>
+        </div>
+</body>
+</html>
