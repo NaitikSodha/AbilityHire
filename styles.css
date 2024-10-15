@@ -283,6 +283,9 @@ font-size: 30px;
   font-size: 20px;
   margin: 10px 20px;
 }
+.signup {
+  margin: -20px 60px;
+}
 .job-profile h2 {
   font-weight: 600;
   font-size: 20px;
@@ -290,6 +293,9 @@ font-size: 30px;
 }
 .job-profile {
   margin: 0px 20px;
+}
+.logout-button {
+  margin: 10px;
 }
 button {
   background-color: #4CAF50; 
