@@ -12,6 +12,7 @@
 <body>
     <div id="navbar"></div>
     <div class="top-menu"><h1>Register</h1></div>
+    <div id="error-message" class="error-message"></div>
     <form action="/register" method="POST" class="form" onsubmit="return validateForm()">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br>
@@ -52,5 +53,25 @@
                 confirmPassword.classList.remove("mismatch");
             }
         });
+
+        // Function to get query parameters
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Display error message from query parameters
+    const errorMessage = getQueryParameter('error');
+    if (errorMessage) {
+        document.getElementById('error-message').innerText = errorMessage;
+        document.getElementById('error-message').style.display = 'block';
+    }
+
+    window.addEventListener('load', () => {
+        // Clear query parameters from URL
+        const url = new URL(window.location);
+        url.searchParams.delete('error');      // Remove error param
+        window.history.replaceState({}, document.title, url);
+    });
 </script>
 </html>

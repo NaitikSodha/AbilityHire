@@ -11,17 +11,48 @@
 </head>
 <body>
     <div id="navbar"></div>
-    <h1>Login</h1>
+    <div class="top-menu"><h1>Login</h1></div>
+    <div id="success-message" class="success-message"></div>
+    <div id="error-message" class="error-message"></div>
     <form action="/login" method="POST" class="form">
         <label for="username">Username:</label>
-        <input type="text" name="username" required>
-    
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
+        <input type="text" id="username" name="username" required>
 
-        New user? <a href="register.html">Register</a>
-    
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
         <input type="submit" value="Login">
+        New user? <a href="register.html">Register</a>
     </form>
 </body>
+<script>
+     // Function to get query parameters
+     function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Display error message from query parameters
+        const errorMessage = getQueryParameter('error');
+        if (errorMessage) {
+            document.getElementById('error-message').innerText = errorMessage;
+            document.getElementById('error-message').style.display = 'block';
+        }
+
+        // Display success message from query parameters
+        const urlParam = new URLSearchParams(window.location.search);
+        if (urlParam.get('registered') === 'success') {
+            document.getElementById('success-message').innerText = 
+            'Registration successful! Please log in.';
+        }
+        
+        // Clear error and success messages from URL on page load
+    window.addEventListener('load', () => {
+        // Clear query parameters from URL
+        const url = new URL(window.location);
+        url.searchParams.delete('error');      // Remove error param
+        url.searchParams.delete('registered'); // Remove success param
+        window.history.replaceState({}, document.title, url);
+    });
+</script>
 </html>

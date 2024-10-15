@@ -12,10 +12,118 @@
 <body>
     <div id="navbar"></div>
 
-    <h1>Profile</h1>
-    <div>
-        <a href="login.html">Login</a>
-        <a href="register.html">Register</a>
+    <div class="top-menu"><h1>Profile</h1></div>
+    <div id="success-message" class="success-message"></div>
+    <div id="welcome-message" class="welcome-message"></div>
+    <div id="email-message" class="welcome-message"></div>
+    <div id="job-applications-container" class="job-profile" style="display: none;">
+        <h2>Jobs You Applied For:</h2>
+        <div id="job-applications-list"></div> <!-- Container for job applications -->
+    </div>
+    <div id="auth-links" class="signup">
+        <button onclick="window.location.href='login.html'">Login</button>
+        <button onclick="window.location.href='register.html'">Register</button>
+    </div>
+    <div id="logout-button-container" style="display: none;">
+        <button id="logout-button">Logout</button>
     </div>
 </body>
+<script>
+    // Function to get query parameters
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Handle user login state
+    function handleUserLogin() {
+        const loggedIn = getQueryParameter('loggedIn');
+        const username = getQueryParameter('username');
+        const email = getQueryParameter('email');
+
+        if (loggedIn === 'true') {
+            sessionStorage.setItem('isLoggedIn', 'true'); // Set session storage for login state
+            sessionStorage.setItem('username', username); // Store username in session storage
+            sessionStorage.setItem('email', email); // Store email in session storage
+        }
+    }
+
+    // Hide or show elements based on login state
+    function updateUIBasedOnLoginState() {
+        const authLinks = document.getElementById('auth-links');
+        const logoutButtonContainer = document.getElementById('logout-button-container');
+        const jobcont = document.getElementById('job-applications-container');
+
+        if (sessionStorage.getItem('isLoggedIn') === 'true') {
+            if (authLinks) {
+                authLinks.style.display = 'none'; // Hide auth links
+            }
+            if (logoutButtonContainer) {
+                logoutButtonContainer.style.display = 'block'; // Show logout button
+            }
+            if(jobcont) {
+                jobcont.style.display = 'block'; // Show job details
+            }
+            // Display welcome message
+            const welcomeMessage = `Username: ${sessionStorage.getItem('username')}`;
+            document.getElementById('welcome-message').innerText = welcomeMessage;
+            const emailMessage = `Email: ${sessionStorage.getItem('email')}`;
+            document.getElementById('email-message').innerText = emailMessage;
+
+            // Fetch job applications for the logged-in user
+            fetchJobApplications(sessionStorage.getItem('email')); // Use email from session storage
+        } 
+    }
+
+    // Fetch job applications from the server
+    function fetchJobApplications(email) {
+        fetch(`/api/job-applications?email=${encodeURIComponent(email)}`)
+            .then(response => response.json())
+            .then(jobs => {
+                const jobApplicationsList = document.getElementById('job-applications-list');
+                jobApplicationsList.innerHTML = ''; // Clear previous job applications
+
+                if (jobs.length === 0) {
+                    jobApplicationsList.innerHTML = '<p>No job applications found.</p>';
+                } else {
+                    jobs.forEach(job => {
+                        const jobDiv = document.createElement('div');
+                        jobDiv.innerHTML = `
+                            <h3>${job.jobTitle}</h3>
+                            <p>Company: ${job.company}</p>
+                            <p>Location: ${job.location}</p>
+                            <p>Uploaded Resume: <a href="${job.pdfFilePath}" target="_blank">View</a></p>
+                            <hr>
+                        `;
+                        jobApplicationsList.appendChild(jobDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                document.getElementById('job-applications-list').innerText = 'Error loading job applications.';
+            });
+    }
+
+    // Clear query message on page load
+    window.addEventListener('load', () => {
+        handleUserLogin(); // Check login state and store data in session storage
+        updateUIBasedOnLoginState(); // Update UI based on login state
+
+        // Clear query parameters
+        const url = new URL(window.location);
+        url.searchParams.delete('success');
+        url.searchParams.delete('loggedIn');
+        url.searchParams.delete('username');
+        url.searchParams.delete('email');
+        window.history.replaceState({}, document.title, url);
+    });
+
+    // Handle logout
+    document.getElementById('logout-button')?.addEventListener('click', () => {
+        sessionStorage.removeItem('isLoggedIn'); // Clear session storage
+        sessionStorage.removeItem('username'); // Clear username from session storage
+        sessionStorage.removeItem('email'); // Clear email from session storage
+        window.location.href = '/profile'; // Redirect to profile page
+    });
+</script>
 </html>

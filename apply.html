@@ -12,6 +12,8 @@
 <body>
     <div id="navbar"></div>
     <div class="top-menu"><h1>Apply for Jobs</h1></div>
+    <div id="error-message" class="error-message"></div>
+    <div id="success-message" class="success-message"></div>
     <form action="/submit-form" method="post" enctype="multipart/form-data" class="form">
         <label for="jobTitle">Job Title</label>
         <input type="text" id="jobTitle" name="jobTitle" readonly>
@@ -78,6 +80,32 @@
         disability.value = decodeURIComponent(queryParams.disability);
     }
 };
+    // Function to get query parameters
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
 
+    // Display success message from query parameters
+    const successMessage = getQueryParameter('success');
+    if (successMessage) {
+        document.getElementById('success-message').innerText = successMessage;
+        document.getElementById('success-message').style.display = 'block';
+    }
+
+    // Display error message from query parameters
+    const errorMessage = getQueryParameter('error');
+    if (errorMessage) {
+        document.getElementById('error-message').innerText = errorMessage;
+        document.getElementById('error-message').style.display = 'block';
+    }
+
+    // Clear query message on page load
+    window.addEventListener('load', () => {
+        const url = new URL(window.location);
+        url.searchParams.delete('success');
+        url.searchParams.delete('error'); // Clear error message as well
+        window.history.replaceState({}, document.title, url);
+    });
 </script>
 </html>
