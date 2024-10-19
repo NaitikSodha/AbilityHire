@@ -5,6 +5,7 @@ const multer = require('multer');
 const session = require('express-session');
 const path = require('path');
 const app = express();
+const fs = require('fs');
 
 // Body-parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -179,13 +180,23 @@ app.get('/api/job-applications', async (req, res) => {
 app.delete('/api/job-applications/:jobId', async (req, res) => {
     const jobId = req.params.jobId;
 
-    // Assuming you are using MongoDB
-    Applicant.deleteOne({ _id: jobId }, (err) => {
-        if (err) {
-            return res.status(500).json({ success: false, message: 'Failed to cancel application.' });
-        }
-        return res.status(200).json({ success: true, message: 'Application canceled successfully.' });
-    });
+    // Find the job application first to get the PDF file path
+    const jobApplication = await Applicant.findById(jobId);
+
+    if (jobApplication) {
+        const pdfFilePath = jobApplication.pdfFilePath;
+
+        // Delete the application
+        await Applicant.deleteOne({ _id: jobId });
+
+        // Remove the associated PDF file from the uploads folder
+        fs.unlink(path.join(__dirname, pdfFilePath), (unlinkErr) => {
+            if (unlinkErr) {
+                return res.status(500).json({ success: false, message: 'Application canceled but failed to delete file.' });
+            }
+                return res.status(200).json({ success: true, message: 'Application and file canceled successfully.' });
+        });
+    }
 });
 
 // Serve the HTML form for job applicants
@@ -239,7 +250,6 @@ app.get('/apply', (req, res) => {
 });
 
 // Create 'uploads' directory if it doesn't exist
-const fs = require('fs');
 const dir = './uploads';
 if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);

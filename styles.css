@@ -619,3 +619,28 @@ label {
 .footer-link { 
   margin-top: 10px;
 }
+.cancel-apply-button {
+  background-color: #ff4d4d; 
+  color: white; 
+  border: none; 
+  padding: 6px 12px; 
+  margin: 5px 0px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-apply-button:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}
+
+.cancel-apply-button:active {
+  background-color: #e60000; /* Even darker when clicked */
+  box-shadow: none; /* Remove shadow on click for a "pressed" look */
+}
+
+.cancel-apply-button:focus {
+  outline: none; /* Remove focus outline */
+}
