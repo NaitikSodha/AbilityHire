@@ -70,7 +70,6 @@ app.post('/register', (req, res) => {
     User.findOne({ email: email })
         .then(existingUser => {
             if (existingUser) {
-                console.log('Email already exists:', email);
                 return res.redirect('/register.html?error=Email already exists'); // Redirect and return immediately
             }
 
@@ -119,7 +118,7 @@ app.post('/login', (req, res) => {
         .then(user => {
             if (user) {
             const email = user.email;
-                res.redirect(`/profile?success=Login%20Successful!&loggedIn=true&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}`); // Redirect with success and username
+                res.redirect(`/profile?success=Login%20Successful%20!&loggedIn=true&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}`); // Redirect with success and username
             } else {
                 res.redirect('/login?error=Invalid%20username%20or%20password.'); // Redirect to login with error message
             }
@@ -177,6 +176,17 @@ app.get('/api/job-applications', async (req, res) => {
     }
 });
 
+app.delete('/api/job-applications/:jobId', async (req, res) => {
+    const jobId = req.params.jobId;
+
+    // Assuming you are using MongoDB
+    Applicant.deleteOne({ _id: jobId }, (err) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Failed to cancel application.' });
+        }
+        return res.status(200).json({ success: true, message: 'Application canceled successfully.' });
+    });
+});
 
 // Serve the HTML form for job applicants
 app.get('/', (req, res) => {

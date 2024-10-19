@@ -77,7 +77,7 @@ window.onload = function() {
             jobClone.querySelector('.job-salary').textContent = job.salary;
             jobClone.querySelector('.c-logo').src = job.logo;
             const applyButton = jobClone.querySelector('.apply-now');
-            applyButton.href = `apply.html?title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.company)}&location=${encodeURIComponent(job.location)}&disability=${encodeURIComponent(job.disability)}`;
+            applyButton.href = `apply.html?title=${encodeURIComponent(job.title)}&company=${encodeURIComponent(job.company)}&location=${encodeURIComponent(job.location)}&disability=${encodeURIComponent(job.disability)}&salary=${encodeURIComponent(job.salary)}`;
             
             // Append the populated template to the container
             jobContainer.appendChild(jobClone);

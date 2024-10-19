@@ -11,7 +11,7 @@
 </head>
 <body>
     <div id="navbar"></div>
-    <div class="top-menu"><h1>Register</h1></div>
+    <!-- <div class="top-menu"><h1>Register</h1></div>
     <div id="error-message" class="error-message"></div>
     <form action="/register" method="POST" class="form" onsubmit="return validateForm()">
         <label for="username">Username:</label>
@@ -29,7 +29,47 @@
         <input type="submit" value="Register"><br>
 
         Already Registered? <a href="login.html" class="signin">Login</a>
-    </form>
+    </form> -->
+    <div class="container-r">
+        <!-- Image Section -->
+        <div class="image-section">
+            <img src="signin.png" alt="Working Image">
+        </div>
+        <div class="formbg-outer">
+            <div class="formbg">
+              <div class="form-header">
+                <h2>Sign Up</h2>
+              </div>
+                <div id="success-message" class="success-message"></div>
+                <div id="error-message" class="error-message"></div>
+                <form action="/register" method="POST" onsubmit="return validateForm()">
+                  <div class="field">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                  </div>
+                  <div class="field">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                  </div>
+                  <div class="field">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                  </div>
+                  <div class="field">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                  </div>
+                  <div>
+                    <input type="submit" value="Register">
+                  </div>
+                </form>
+              
+            </div>
+            <div class="footer-link">
+              <span>Already Registered? <a href="/login">Login</a></span>
+            </div>
+          </div>
+    </div>
 </body>
 <script>
     function validateForm() {

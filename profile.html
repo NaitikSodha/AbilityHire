@@ -13,7 +13,7 @@
     <div id="navbar"></div>
 
     <div class="top-menu"><h1>Profile</h1></div>
-    <div id="success-message" class="success-message"></div>
+    <div id="success-message" class="success-message" style="margin-left: 20px;"></div>
     <div id="welcome-message" class="welcome-message"></div>
     <div id="email-message" class="welcome-message"></div>
     <div id="job-applications-container" class="job-profile" style="display: none;">
@@ -35,6 +35,12 @@
         return urlParams.get(name);
     }
 
+    const successMessage = getQueryParameter('success');
+       if (successMessage) {
+           document.getElementById('success-message').innerText = successMessage;
+           document.getElementById('success-message').style.display = 'block';
+       }
+
     // Handle user login state
     function handleUserLogin() {
         const loggedIn = getQueryParameter('loggedIn');
@@ -53,6 +59,7 @@
         const authLinks = document.getElementById('auth-links');
         const logoutButtonContainer = document.getElementById('logout-button-container');
         const jobcont = document.getElementById('job-applications-container');
+        
 
         if (sessionStorage.getItem('isLoggedIn') === 'true') {
             if (authLinks) {
@@ -93,10 +100,12 @@
                             <p>Company: ${job.company}</p>
                             <p>Location: ${job.location}</p>
                             <p>Uploaded Resume: <a href="${job.pdfFilePath}" target="_blank">View</a></p>
+                            <button class="cancel-apply-button" data-job-id="${job._id}">Cancel Apply</button>
                             <hr>
                         `;
                         jobApplicationsList.appendChild(jobDiv);
                     });
+                    attachCancelApplyEventListeners();
                 }
             })
             .catch(error => {
@@ -104,6 +113,38 @@
             });
     }
 
+    // Function to handle job removal
+function attachCancelApplyEventListeners() {
+    const cancelButtons = document.querySelectorAll('.cancel-apply-button');
+    
+    cancelButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const jobId = event.target.getAttribute('data-job-id'); // Get job ID
+
+            // Call function to delete job application
+            cancelJobApplication(jobId);
+        });
+    });
+}
+
+function cancelJobApplication(jobId) {
+    fetch(`/api/job-applications/${jobId}`, {
+        method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            // Remove the job application from the UI
+            document.querySelector(`button[data-job-id="${jobId}"]`).parentElement.remove();
+        } else {
+            alert('Failed to cancel job application.');
+        }
+    })
+    .catch(error => {
+        console.error('Error cancelling job application:', error);
+        alert('An error occurred while trying to cancel the application.');
+    });
+}
     // Clear query message on page load
     window.addEventListener('load', () => {
         handleUserLogin(); // Check login state and store data in session storage
