@@ -26,7 +26,7 @@ const upload = multer({ storage: storage });
 
 const connectDB = async() => {
     try {
-        await mongoose.connect('mongodb+srv://naitikjsodha:tlxnY2kySVWhMslG@abilityhire.pr8eh.mongodb.net/AbilityHire?retryWrites=true&w=majority&appName=AbilityHire')
+        await mongoose.connect('mongodb+srv://naitikjsodha:tlxnY2kySVWhMslG@abilityhire.pr8eh.mongodb.net/?retryWrites=true&w=majority&appName=AbilityHire')
         console.log("Connected to MongoDB successfully")
     }
     catch {
