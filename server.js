@@ -24,30 +24,27 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-const uri = 'mongodb+srv://naitikjsodha:7namnGeqyTuv4RRX@abilityhire.pr8eh.mongodb.net/?retryWrites=true&w=majority&appName=AbilityHire';
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch((err) => console.error('MongoDB connection error:', err));
+// const uri = 'mongodb+srv://naitikjsodha:7namnGeqyTuv4RRX@abilityhire.pr8eh.mongodb.net/?retryWrites=true&w=majority&appName=AbilityHire';
+// mongoose.connect(uri)
+// .then(() => console.log('Connected to MongoDB'))
+// .catch((err) => console.error('MongoDB connection error:', err));
 
-// const connectDB = async() => {
-//     try {
-//         await mongoose.connect('mongodb+srv://naitikjsodha:7namnGeqyTuv4RRX@abilityhire.pr8eh.mongodb.net/?retryWrites=true&w=majority&appName=AbilityHire')
-//         console.log("Connected to MongoDB successfully")
-//     }
-//     catch {
-//         console.log("Connect failed")
-//     }
-// }
+// // const connectDB = async() => {
+// //     try {
+// //         await mongoose.connect('mongodb+srv://naitikjsodha:7namnGeqyTuv4RRX@abilityhire.pr8eh.mongodb.net/?retryWrites=true&w=majority&appName=AbilityHire')
+// //         console.log("Connected to MongoDB successfully")
+// //     }
+// //     catch {
+// //         console.log("Connect failed")
+// //     }
+// // }
 
-// connectDB();
+// // connectDB();
 
 // // Connect to MongoDB
-// mongoose.connect('mongodb://localhost:27017/myDatabase')
-//     .then(() => console.log('MongoDB connected'))
-//     .catch(err => console.log(err));
+mongoose.connect('mongodb://localhost:27017/myDatabase')
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log(err));
 
 // Define a schema for job applicants
 const applicantSchema = new mongoose.Schema({
