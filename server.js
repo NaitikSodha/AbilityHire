@@ -24,17 +24,25 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-const connectDB = async() => {
-    try {
-        await mongoose.connect('mongodb+srv://naitikjsodha:tlxnY2kySVWhMslG@abilityhire.pr8eh.mongodb.net/?retryWrites=true&w=majority&appName=AbilityHire')
-        console.log("Connected to MongoDB successfully")
-    }
-    catch {
-        console.log("Connect failed")
-    }
-}
+const uri = 'mongodb+srv://naitikjsodha:7namnGeqyTuv4RRX@abilityhire.pr8eh.mongodb.net/?retryWrites=true&w=majority&appName=AbilityHire';
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch((err) => console.error('MongoDB connection error:', err));
 
-connectDB();
+// const connectDB = async() => {
+//     try {
+//         await mongoose.connect('mongodb+srv://naitikjsodha:7namnGeqyTuv4RRX@abilityhire.pr8eh.mongodb.net/?retryWrites=true&w=majority&appName=AbilityHire')
+//         console.log("Connected to MongoDB successfully")
+//     }
+//     catch {
+//         console.log("Connect failed")
+//     }
+// }
+
+// connectDB();
 
 // // Connect to MongoDB
 // mongoose.connect('mongodb://localhost:27017/myDatabase')
