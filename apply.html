@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Jobs</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src='https://unpkg.com/akar-icons-fonts'></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="navbar"></div>
+    <div class="top-menu"><h1>Apply for Jobs</h1></div>
+    <div id="error-message" class="error-message"></div>
+    <div id="success-message" class="success-message" style="margin-left: 20px;"></div>
+    <form action="/submit-form" method="post" enctype="multipart/form-data" class="form">
+        <label for="jobTitle">Job Title</label>
+        <input type="text" id="jobTitle" name="jobTitle" readonly>
+
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" readonly>
+
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" readonly>
+
+        <label for="disability">Disability</label>
+        <input type="text" id="disability" name="disability" readonly>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="contact">Contact:</label>
+        <input type="tel" id="contact" name="contact" pattern="[0-9]{10}" required><br>
+
+        <label for="pdf"><i class="ai-share-box"></i> Upload Resume PDF</label>
+        <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
+        <span id="file-chosen">No file chosen</span><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+<script>
+    window.onload = function() {
+    // Function to extract query parameters
+    function getQueryParams() {
+        const params = {};
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        for (const [key, value] of urlParams.entries()) {
+            params[key] = value;
+        }
+        return params;
+    }
+
+    const queryParams = getQueryParams();
+
+    // Pre-fill the form with job details
+    const jobTitleField = document.getElementById('jobTitle');
+    const companyField = document.getElementById('company');
+    const locationField = document.getElementById('location');
+    const disabilityfield = document.getElementById('disability');
+    
+    if (queryParams.title) {
+        jobTitleField.value = decodeURIComponent(queryParams.title);
+    }
+
+    if (queryParams.company) {
+        companyField.value = decodeURIComponent(queryParams.company);
+    }
+
+    if (queryParams.location) {
+        locationField.value = decodeURIComponent(queryParams.location);
+    }
+
+    if (queryParams.disability) {
+        disabilityfield.value = decodeURIComponent(queryParams.disability);
+    }
+};
+    // Function to get query parameters
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Display success message from query parameters
+    const successMessage = getQueryParameter('success');
+    if (successMessage) {
+        document.getElementById('success-message').innerText = successMessage;
+        document.getElementById('success-message').style.display = 'block';
+    }
+
+    // Display error message from query parameters
+    const errorMessage = getQueryParameter('error');
+    if (errorMessage) {
+        document.getElementById('error-message').innerText = errorMessage;
+        document.getElementById('error-message').style.display = 'block';
+    }
+
+    // Clear query message on page load
+    window.addEventListener('load', () => {
+        const url = new URL(window.location);
+        url.searchParams.delete('success');
+        url.searchParams.delete('error'); // Clear error message as well
+        window.history.replaceState({}, document.title, url);
+    });
+</script>
+</html>
