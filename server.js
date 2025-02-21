@@ -6,6 +6,16 @@ const session = require('express-session');
 const path = require('path');
 const app = express();
 const fs = require('fs');
+require('dotenv').config();
+const twilio = require('twilio');
+const sgMail = require('@sendgrid/mail');
+
+const client = new twilio(
+    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 // Body-parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -222,37 +232,52 @@ app.get('/', (req, res) => {
 });
 
 app.post('/submit-form', upload.single('pdf'), (req, res) => {
-    const { jobTitle, email } = req.body;
+    const { jobTitle, email, contact, name } = req.body;
 
-    // Check if the user has already applied for this job
     Applicant.findOne({ jobTitle: jobTitle, email: email })
         .then(existingApplicant => {
             if (existingApplicant) {
-                // If an existing application is found, redirect back with an error message
                 return res.redirect('/apply?error=You have already applied for this job.');
             }
 
-            // Create a new applicant if no existing application is found
             const newApplicant = new Applicant({
                 jobTitle: jobTitle,
                 company: req.body.company,
                 location: req.body.location,
                 disability: req.body.disability,
-                name: req.body.name,
+                name: name,
                 email: email,
-                contact: req.body.contact,
-                pdfFilePath: req.file.path // Store file path in the database
+                contact: contact,
+                pdfFilePath: req.file ? req.file.path : null
             });
 
             return newApplicant.save()
-                .then(() => {
-                    // Redirect to the apply page after successful submission
+            .then(async () => { // Make the function async
+                if (contact) {
+                    client.messages.create({
+                        body: `Hi ${name}, thank you for applying for ${jobTitle}. We will review your application soon!`,
+                        from: process.env.TWILIO_PHONE_NUMBER,
+                        to: contact.startsWith('+') ? contact : `+91${contact}`
+                    });
+                }
+        
+                const msg = {
+                    to: email,
+                    from: process.env.SENDGRID_VERIFIED_EMAIL, // Must be a verified sender email
+                    subject: `Application Received for ${jobTitle}`,
+                    text: `Dear ${name},\n\nThank you for applying for ${jobTitle}. We have received your application and will review it shortly.\n\nBest Regards,\nHiring Team`
+                };
+        
+                try {
+                    await sgMail.send(msg); // Await the email sending process
                     res.redirect('/apply?success=Application submitted successfully');
-                });
+                } catch (error) {
+                    res.status(500).send('Error sending email'); // Return a clear error
+                }
+            });
         })
         .catch(err => {
-            console.error('Error checking existing applications:', err);
-            res.status(500).send('Error checking existing applications');
+            res.status(500).send('Error processing application');
         });
 });
 

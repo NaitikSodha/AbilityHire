@@ -47,6 +47,11 @@ fetch('navbar.html')
             synth.cancel(); // Stop speaking when leaving the page
         });
 
+        document.addEventListener("keydown", (event) => {
+            if (event.key.toLowerCase() === "m") {
+                window.toggleFeature();
+            }
+        });
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
